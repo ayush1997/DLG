@@ -1,55 +1,56 @@
 from PIL import Image,ImageDraw
 import os
 
-size = 3364,216
-text = ""
-w, h = 213, 13;
-copy = 0
-newImage = Image.new("RGBA", size, "white")
-path = "../level1specs/"
-newLevelPath = '../Generated_levels/'
+if __name__=="__main__":
+    matrix_size = 3364,216
+    change_string = ""
+    width, heigth = 213, 13
+    copy = 0
+    newLevel_image = Image.new("RGBA", matrix_size, "white")
+    path = "../level1specs/"
+    newLevelPath = '../Generated_levels/'
 
-pictures = []
-symbols_array = ["=","e","=","c","c","f","p","?","c","#","-","p","p","p","#","?","=","=","e","p","p","p","p","p","p","-"]
+    pictures = []
+    symbols_array = ["=","e","=","c","c","f","p","?","c","#","-","p","p","p","#","?","=","=","e","p","p","p","p","p","p","-"]
 
-trans = [[0 for x in range(w)] for y in range(h)]
+    transpose = [[0 for x in range(width)] for y in range(heigth)]
 
-def CIM(filename_complete_path, filename):
+    def composite_function(filename_complete_path, filename):
 
-        global copy
-        r = open(filename_complete_path, "r")
-        i = 0
-        while(i<13):
-            text= r.readline()
-            for c in text:
-                    if(copy == 213): break
-                    if(c == '\n'): continue
-                    trans[i][copy] = c
-                    copy += 1
-            text = ""
-            copy = 0
-            i+=1
+            global copy
+            r = open(filename_complete_path, "r")
+            i = 0
+            while(i<13):
+                change_string= r.readline()
+                for c in change_string:
+                        if(copy == 213): break
+                        if(c == '\n'): continue
+                        transpose[i][copy] = c
+                        copy += 1
+                change_string = ""
+                copy = 0
+                i+=1
 
-        r.close()
-
-
-        for i in range(0,13):
-            for j in range(0,213):
-                pictures.append(symbols_array.index(trans[i][j])+1)
-
-        itr = 0
-        for y in range (7,213,16):
-            for x in range (16,3416,16):
-                if (x > 3408 or y > 213): break;
-                imgPath = path+str(pictures[itr])+".png"
-                img = Image.open(imgPath)
-                newImage.paste(img,(x,y))
-                itr += 1
-        print(itr)
-        newImage.save(newLevelPath+os.path.splitext(filename)[0]+'.png')
+            r.close()
 
 
-# for z in range(1,50):
-CIM("../Generated_levels/mario-1-1-edited_trans_new_"+str(z)+"_upRight.csv","mario-1-1-edited_trans_new_"+str(z)+".txt")
+            for i in range(0,13):
+                for j in range(0,213):
+                    pictures.append(symbols_array.index(transpose[i][j])+1)
+
+            itr = 0
+            for y in range (7,213,16):
+                for x in range (16,3416,16):
+                    if (x > 3408 or y > 213): break;
+                    imgPath = path+str(pictures[itr])+".png"
+                    img = Image.open(imgPath)
+                    newLevel_image.paste(img,(x,y))
+                    itr += 1
+            print(itr)
+            newLevel_image.save(newLevelPath+os.path.splitext(filename)[0]+'.png')
+
+
+    # for z in range(1,50):
+    composite_function("../Generated_levels/mario-1-1-edited_trans_new_"+str(z)+"_upRight.csv","mario-1-1-edited_trans_new_"+str(z)+".txt")
 
 

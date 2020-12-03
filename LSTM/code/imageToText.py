@@ -8,32 +8,32 @@ import csv
 import os
 import sys
 
-path = "../level1specs/"
+specs_path = "../level1specs/"
 im_array = []
-symbols_array = ["=","E","=","C","C","F","P","?","C","#","-","P","P","P","#","?","=","=","E","P","P","P","P","P","P","-"]
+unique_symbols = ["=","E","=","C","C","F","P","?","C","#","-","P","P","P","#","?","=","=","E","P","P","P","P","P","P","-"]
 
 folder_levels = "../Edited/"
 level_name = sys.argv[1]
 
-orig_csv_save_path = "../levels_CSV/"
-trans_csv_save_path = "../levels_transposed/"
+original_path = "../levels_CSV/"
+transposed_path = "../levels_transposed/"
 
-ssim_array = []
-max_val = 0
-max_array = []
-level=[]
-w, h = 223, 13;
-Matrix = [[0 for x in range(w)] for y in range(h)]
-trans = [[0 for x in range(h)] for y in range(w)]
+ssim = []
+maximum_value = 0
+maximum_matrix = []
+level_list=[]
+weight, height = 223, 13;
+Matrix = [[0 for x in range(weight)] for y in range(height)]
+trans = [[0 for x in range(height)] for y in range(weight)]
 
 
 for i in range(1,27):
-	name = path + str(i) + ".png"
+	name = specs_path + str(i) + ".png"
 	im_array.append(name)
 
 
 def imgComp(imageA):
-		global ssim_array
+		global ssim
 		for i in range(0,len(im_array)):
 		    M=Image.open(im_array[i])
 		    match = resizeimage.resize_cover(M, [16, 16])
@@ -45,39 +45,39 @@ def imgComp(imageA):
 		    match=cv2.cvtColor(match, cv2.COLOR_BGR2GRAY)
 		    xyz=cv2.cvtColor(xyz, cv2.COLOR_BGR2GRAY)
 		    ssim_ = measure.compare_ssim(xyz,match)
-		    ssim_array.append(ssim_)
+		    ssim.append(ssim_)
 
-		max_val = max(ssim_array)			
-		if(max_val < 0.5): max_array.append(11)
+		maximum_value = max(ssim)			
+		if(maximum_value < 0.5): maximum_matrix.append(11)
 		else:
-		 max_array.append(ssim_array.index(max(ssim_array))+1)
-		ssim_array = []
+		 maximum_matrix.append(ssim.index(max(ssim))+1)
+		ssim = []
 
 im = Image.open(folder_levels+level_name)
 count = 0
 for y in range (7,215,16):
 		for x in range (16,3584,16):
 				if (x > 3584 or y > 215):
-						break;
+						break
 				img2 =im.crop((x,y ,x+16, y+16))
 				imgComp(img2)
 				count += 1
 
 string = ""
-f = open(orig_csv_save_path + os.path.splitext(level_name)[0] + ".csv", "w")
-itr = 0
+f = open(original_path + os.specs_path.splitext(level_name)[0] + ".csv", "weight")
+iterator = 0
 for i in range (0,13):
 	for j in range (0,223):
-		Matrix[i][j] = symbols_array[max_array[itr]-1]
-		string += (symbols_array[max_array[itr]-1])
-		itr += 1
+		Matrix[i][j] = unique_symbols[maximum_matrix[iterator]-1]
+		string += (unique_symbols[maximum_matrix[iterator]-1])
+		iterator += 1
 	print(string)
 	f.write(string)
 	string = ""
 	f.write("\n")
 f.close()
 
-r = open(trans_csv_save_path + os.path.splitext(level_name)[0] + "_trans.txt", "w")
+r = open(transposed_path + os.specs_path.splitext(level_name)[0] + "_trans.txt", "weight")
 temp = ""
 for i in range(0, 223):
 	for j in range(0, 13):
